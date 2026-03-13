@@ -84,5 +84,16 @@ public class BookPriceServiceTests {
         assertEquals(187.5, price);
     }
 
+    @Test
+    void calculatetwoBooksOneExtraCopyDiscountsUniqueOnly() {
+        List<BookItems> threeBooks = List.of(
+                new BookItems("Clean code", 2),
+                new BookItems("Clean Coder", 1)
+        );
+
+        double price = bookPriceService.calculateBookPrice(threeBooks);
+        assertEquals(145.0, price);  
+    }
+
 
 }
