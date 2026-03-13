@@ -24,4 +24,16 @@ public class BookPricingServiceTests {
         assertEquals(100.0, price);
     }
 
+    @Test
+    public void CalculatePriceWithEmptyBooks(){
+        double price = bookPricingService.calculateOrderDetails("",2);
+        assertEquals(0.0, price);
+    }
+
+    @Test
+    public void CalculatePriceWithZeroQuantity(){
+        double price = bookPricingService.calculateOrderDetails("Clean Code",0);
+        assertEquals(0.0, price);
+    }
+
 }
