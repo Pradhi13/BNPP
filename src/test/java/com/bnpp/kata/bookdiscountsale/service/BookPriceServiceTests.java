@@ -73,5 +73,16 @@ public class BookPriceServiceTests {
         assertEquals(200.0, price);
     }
 
+    @Test
+    public void calculateFiveDifferentBookPrice() {
+        bookItemsList = List.of(new BookItems("Clean code", 1),
+                new BookItems("The Clean Coder", 1),
+                new BookItems("Clean Architecture", 1),
+                new BookItems("Test Driven Development by Example", 1),
+                new BookItems("Working Effectively With Legacy Code",1));
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(250.0, price);
+    }
+
 
 }
