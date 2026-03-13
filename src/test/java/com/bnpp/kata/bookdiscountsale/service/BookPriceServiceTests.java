@@ -15,50 +15,63 @@ public class BookPriceServiceTests {
 
     private BookItems bookItems;
     private List<BookItems> bookItemsList;
+
     @BeforeEach
-    public void setup(){
-        bookPriceService=new BookPriceService();
+    public void setup() {
+        bookPriceService = new BookPriceService();
         bookItemsList = new ArrayList<>();
 
     }
 
     @Test
-    public void calculateSingleBookPrice(){
+    public void calculateSingleBookPrice() {
 
 
-        bookItemsList = List.of(new BookItems("Clean code",2));
+        bookItemsList = List.of(new BookItems("Clean code", 2));
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(100.0,price);
+        assertEquals(100.0, price);
     }
 
     @Test
-    public void calculateSingleBookWithNullValue(){
+    public void calculateSingleBookWithNullValue() {
 
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(0.0,price);
+        assertEquals(0.0, price);
     }
 
     @Test
-    public void calculateSingleBookWithZeroQuantity(){
-        bookItemsList = List.of(new BookItems("Clean code",0));
+    public void calculateSingleBookWithZeroQuantity() {
+        bookItemsList = List.of(new BookItems("Clean code", 0));
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(0.0,price);
+        assertEquals(0.0, price);
     }
 
     @Test
-    public void calculateTwoDifferentBookPrice(){
-        bookItemsList = List.of(new BookItems("Clean code",1),
-                new BookItems("The Clean Coder",1));
+    public void calculateTwoDifferentBookPrice() {
+        bookItemsList = List.of(new BookItems("Clean code", 1),
+                new BookItems("The Clean Coder", 1));
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(100.0,price);
+        assertEquals(100.0, price);
     }
 
     @Test
-    public void calculateThreeDifferentBookPrice(){
-        bookItemsList = List.of(new BookItems("Clean code",1),
-                new BookItems("The Clean Coder",1),
-                new BookItems("Clean Architecture",1));
+    public void calculateThreeDifferentBookPrice() {
+        bookItemsList = List.of(new BookItems("Clean code", 1),
+                new BookItems("The Clean Coder", 1),
+                new BookItems("Clean Architecture", 1));
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(150.0,price);
+        assertEquals(150.0, price);
     }
+
+    @Test
+    public void calculateFourDifferentBookPrice() {
+        bookItemsList = List.of(new BookItems("Clean code", 1),
+                new BookItems("The Clean Coder", 1),
+                new BookItems("Clean Architecture", 1),
+                new BookItems("Test Driven Development by Example", 1));
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(200.0, price);
+    }
+
+
 }
