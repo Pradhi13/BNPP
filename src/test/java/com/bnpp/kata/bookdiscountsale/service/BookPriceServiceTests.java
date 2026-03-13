@@ -16,7 +16,7 @@ public class BookPriceServiceTests {
 
     @Test
     public void calculateSingleBookPrice(){
-        double price = bookPriceService.calculateBookPrice("Clean Code");
-        assertEquals(50.0,price);
+        double price = bookPriceService.calculateBookPrice("Clean Code",2);
+        assertEquals(100.0,price);
     }
 }
