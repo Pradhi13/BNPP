@@ -19,4 +19,16 @@ public class BookPriceServiceTests {
         double price = bookPriceService.calculateBookPrice("Clean Code",2);
         assertEquals(100.0,price);
     }
+
+    @Test
+    public void calculateSingleBookWithEmptyData(){
+        double price = bookPriceService.calculateBookPrice("",2);
+        assertEquals(0.0,price);
+    }
+
+    @Test
+    public void calculateSingleBookWithZeroQuantity(){
+        double price = bookPriceService.calculateBookPrice("Clean Code",0);
+        assertEquals(0.0,price);
+    }
 }
