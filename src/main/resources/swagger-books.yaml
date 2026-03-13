@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: DiscountSale
+  description: Get best discounts for your book
+  termsOfService: http://swagger.io/terms/  # Fixed URL
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /calculatePrice:
+    post:
+      operationId: totalOrderDetails
+      requestBody:
+        required: true
+        description: Total Order details with discounted price
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Books'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    BookItems:
+      type: object
+      required:
+        - title
+        - quantity
+      properties:
+        title:
+          type: string  # Quoted 'string'
+        quantity:
+          type: integer
+    Books:
+      type: object
+      properties:
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookItems'
+    GroupDetails:
+      type: object
+      properties:
+        books:
+          type: array
+          items:
+            type: string
+        groupSize:
+          type: integer
+        discountPercentage:
+          type: double
+        afterdiscountPrice:
+          type: double
+    OrderResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupDetails'
+        totalPrice:
+          type: double
+        discountedPrice:
+          type: double
+    PriceResult:
+      type: object
+      properties:
+        price:
+          type: double
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupDetails'
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
