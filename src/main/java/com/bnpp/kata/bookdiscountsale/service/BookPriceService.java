@@ -6,17 +6,28 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookPriceService {
 
-    public double calculateBookPrice(BookItems bookItems) {
+    public double calculateBookPrice(List<BookItems> bookItemsList) {
 
-        if (bookItems.getTitle() == null | bookItems.getTitle().trim().isEmpty() | bookItems.getQuantity() <= 0) {
+
+        if (bookItemsList == null || bookItemsList.isEmpty()) {
 
             return 0.0;
-        } else {
-            return 50.0 * bookItems.getQuantity();
         }
+        long uniqueBooks = bookItemsList.stream()
+                .map(BookItems::getTitle)
+                .collect(Collectors.toSet())
+                .size();
+        double totalBooks = bookItemsList.stream()
+                .mapToDouble(BookItems::getQuantity)
+                .sum();
+        if(totalBooks<=0){
+            return  0.0;
+        }
+        return uniqueBooks * totalBooks * 50.0;
     }
 }

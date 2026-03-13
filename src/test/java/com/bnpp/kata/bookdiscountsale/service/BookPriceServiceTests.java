@@ -4,6 +4,7 @@ import com.bnpp.kata.bookdiscountsale.model.BookItems;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,35 +14,34 @@ public class BookPriceServiceTests {
     private BookPriceService bookPriceService;
 
     private BookItems bookItems;
-
+    private List<BookItems> bookItemsList;
     @BeforeEach
     public void setup(){
         bookPriceService=new BookPriceService();
-        bookItems = new BookItems();
+        bookItemsList = new ArrayList<>();
 
     }
 
     @Test
     public void calculateSingleBookPrice(){
-        bookItems.setTitle("Clean Code");
-        bookItems.setQuantity(2);
-        double price = bookPriceService.calculateBookPrice(bookItems);
+
+
+        bookItemsList = List.of(new BookItems("Clean code",2));
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
         assertEquals(100.0,price);
     }
 
     @Test
-    public void calculateSingleBookWithEmptyData(){
-        bookItems.setTitle("");
-        bookItems.setQuantity(2);
-        double price = bookPriceService.calculateBookPrice(bookItems);
+    public void calculateSingleBookWithNullValue(){
+
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
         assertEquals(0.0,price);
     }
 
     @Test
     public void calculateSingleBookWithZeroQuantity(){
-        bookItems.setTitle("Clean Code");
-        bookItems.setQuantity(0);
-        double price = bookPriceService.calculateBookPrice(bookItems);
+        bookItemsList = List.of(new BookItems("Clean code",0));
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
         assertEquals(0.0,price);
     }
 }
