@@ -20,7 +20,8 @@ public class BookPricingServiceTests {
     @Test
     @DisplayName("Single book price should be 50")
     public void calculatePrice() {
-        double price = bookPricingService.calculateOrderDetails("Clean Code");
-        assertEquals(50.0, price);
+        double price = bookPricingService.calculateOrderDetails("Clean Code",2);
+        assertEquals(100.0, price);
     }
+
 }
