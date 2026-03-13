@@ -44,4 +44,12 @@ public class BookPriceServiceTests {
         double price = bookPriceService.calculateBookPrice(bookItemsList);
         assertEquals(0.0,price);
     }
+
+    @Test
+    public void calculateTwoSameBookPrice(){
+        bookItemsList = List.of(new BookItems("Clean code",1),
+                new BookItems("The Clean Coder",1));
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(100.0,price);
+    }
 }

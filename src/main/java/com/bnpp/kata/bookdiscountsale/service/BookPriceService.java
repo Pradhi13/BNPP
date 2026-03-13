@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
 public class BookPriceService {
 
     public double calculateBookPrice(List<BookItems> bookItemsList) {
-
-
+        double finalPrice=0.0;
         if (bookItemsList == null || bookItemsList.isEmpty()) {
 
-            return 0.0;
+            return finalPrice;
         }
         long uniqueBooks = bookItemsList.stream()
                 .map(BookItems::getTitle)
@@ -26,8 +25,11 @@ public class BookPriceService {
                 .mapToDouble(BookItems::getQuantity)
                 .sum();
         if(totalBooks<=0){
-            return  0.0;
+            return finalPrice;
         }
-        return uniqueBooks * totalBooks * 50.0;
+        if(uniqueBooks==bookItemsList.size()) {
+            finalPrice = totalBooks * 50.0;
+        }
+        return finalPrice;
     }
 }
