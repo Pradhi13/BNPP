@@ -20,17 +20,18 @@ public class BookPriceService {
 
             return 0.0;
         }
-        long uniqueBooks = bookItemsList.stream()
-                .map(BookItems::getTitle)
-                .collect(Collectors.toSet())
-                .size();
-        double totalBooks = bookItemsList.stream()
-                .mapToDouble(BookItems::getQuantity)
-                .sum();
-        if(totalBooks<=0){
+
+        Map<String,Long> titleCounts = bookItemsList.stream().collect(Collectors.groupingBy(BookItems::getTitle,Collectors.counting()));
+
+        long uniqueBooks = titleCounts.size();
+        double discountSetPrice = uniqueBooks * BASE_PRICE * (1-DISCOUNTS[(int) uniqueBooks]);
+
+        long totalQuantity = bookItemsList.stream()
+                .mapToLong(BookItems::getQuantity).sum();
+        double extraCopies = (totalQuantity-uniqueBooks)*BASE_PRICE;
+        if(totalQuantity<=0){
             return 0.0;
         }
-        double discount = DISCOUNTS[(int) Math.min(uniqueBooks, DISCOUNTS.length - 1)];
-        return totalBooks*BASE_PRICE*(1-discount);
+        return discountSetPrice + extraCopies;
     }
 }
