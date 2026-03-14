@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.bnpp.kata.bookdiscountsale.constants.Constants.*;
 
@@ -21,46 +22,43 @@ public class BookPriceService {
     public double calculateBookPrice(@NotEmpty(message = "Book list cannot be empty")
                                      List<@Valid BookItems> bookItemsList) {
         int[] quantities = bookItemsList.stream().mapToInt(BookItems::getQuantity).toArray();
-        return findMinPrice(quantities);
+        return findBestPrice(quantities);
     }
 
-    private double findMinPrice(int[] books) {
+    private double findBestPrice(int[] books) {
 
         String key = Arrays.toString(books);
-        //[2,2,1]
 
         if (cache.containsKey(key))
             return cache.get(key);
 
-        boolean empty = Arrays.stream(books).allMatch(q -> q == 0);
-        if (empty)
+        if (Arrays.stream(books).allMatch(q -> q == 0))
             return ZERO;
 
-        double minPrice = Double.MAX_VALUE;
+        double minPrice = IntStream.rangeClosed(1, books.length)
+                .mapToDouble(size -> calculateGroupPrice(size, books))
+                .filter(price -> price > 0)
+                .min()
+                .orElse(Double.MAX_VALUE);
+        cache.put(key, minPrice);
+        return minPrice;
+    }
+    private double calculateGroupPrice(int size, int[] books) {
 
-        for (int size = 1; size <= books.length; size++) {
+        int[] next = Arrays.copyOf(books, books.length);
 
-            int[] next = Arrays.copyOf(books, books.length);
-            int count = 0;
+        int count = (int) java.util.stream.IntStream.range(0, next.length)
+                .filter(i -> next[i] > 0)
+                .limit(size)
+                .peek(i -> next[i]--)
+                .count();
 
-            for (int i = 0; i < next.length && count < size; i++) {
-
-                if (next[i] > 0) {
-                    next[i]--;
-                    count++;
-                }
-            }
-
-            if (count == size) {
-
-                double price = size * BASE_PRICE * (1 - DISCOUNT.get(size));
-
-                minPrice = Math.min(minPrice, price + findMinPrice(next));
-            }
+        if (count != size) {
+            return ZERO;
         }
 
-        cache.put(key, minPrice);
+        double price = size * BASE_PRICE * (1 - DISCOUNT.get(size));
 
-        return minPrice;
+        return price + findBestPrice(next);
     }
 }
