@@ -1,7 +1,10 @@
 package com.bnpp.kata.bookdiscountsale.service;
 
 import com.bnpp.kata.bookdiscountsale.model.BookItems;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,17 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.bnpp.kata.bookdiscountsale.constants.Constants.*;
+
 @Service
+@Validated
 public class BookPriceService {
 
-    private static final double BASE_PRICE = 50.0;
-    private static final double[] DISCOUNTS = {0.0, 0.0, 0.05, 0.10, 0.20, 0.25};
 
-    public double calculateBookPrice(List<BookItems> bookItemsList) {
-        if (bookItemsList == null || bookItemsList.isEmpty()) {
-
-            return 0.0;
-        }
+    public double calculateBookPrice(@NotEmpty(message = "Book list cannot be empty")
+                                     List<@Valid BookItems> bookItemsList) {
 
         Map<String,Long> titleCounts = bookItemsList.stream().collect(Collectors.groupingBy(BookItems::getTitle,Collectors.counting()));
 
@@ -30,7 +31,7 @@ public class BookPriceService {
                 .mapToLong(BookItems::getQuantity).sum();
         double extraCopies = (totalQuantity-uniqueBooks)*BASE_PRICE;
         if(totalQuantity<=0){
-            return 0.0;
+            return ZERO;
         }
         return discountSetPrice + extraCopies;
     }

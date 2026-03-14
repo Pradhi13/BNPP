@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.bnpp.kata.bookdiscountsale.constants.Constants.ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BookPriceServiceTests {
@@ -36,14 +37,14 @@ public class BookPriceServiceTests {
     public void calculateSingleBookWithNullValue() {
 
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(0.0, price);
+        assertEquals(ZERO, price);
     }
 
     @Test
     public void calculateSingleBookWithZeroQuantity() {
         bookItemsList = List.of(new BookItems("Clean code", 0));
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(0.0, price);
+        assertEquals(ZERO, price);
     }
 
     @Test
@@ -85,15 +86,13 @@ public class BookPriceServiceTests {
     }
 
     @Test
-    void calculatetwoBooksOneExtraCopyDiscountsUniqueOnly() {
-        List<BookItems> threeBooks = List.of(
-                new BookItems("Clean code", 2),
-                new BookItems("Clean Coder", 1)
-        );
+    void calculatethreeBooksTwoExtraCopyDiscountsUniqueOnly() {
+        bookItemsList = List.of(new BookItems("Clean code", 2),
+                new BookItems("The Clean Coder", 2),
+                new BookItems("Clean Architecture", 1));
 
-        double price = bookPriceService.calculateBookPrice(threeBooks);
-        assertEquals(145.0, price);  
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(235.0, price);
     }
-
 
 }
