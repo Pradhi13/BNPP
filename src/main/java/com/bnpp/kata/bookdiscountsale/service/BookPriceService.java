@@ -32,12 +32,12 @@ public class BookPriceService {
         if (cache.containsKey(key))
             return cache.get(key);
 
-        if (Arrays.stream(books).allMatch(q -> q == 0))
+        if (Arrays.stream(books).allMatch(q -> q == ZERO))
             return ZERO;
 
         double minPrice = IntStream.rangeClosed(1, books.length)
                 .mapToDouble(size -> calculateGroupPrice(size, books))
-                .filter(price -> price > 0)
+                .filter(price -> price > ZERO)
                 .min()
                 .orElse(Double.MAX_VALUE);
         cache.put(key, minPrice);
@@ -48,7 +48,7 @@ public class BookPriceService {
         int[] next = Arrays.copyOf(books, books.length);
 
         int count = (int) java.util.stream.IntStream.range(0, next.length)
-                .filter(i -> next[i] > 0)
+                .filter(i -> next[i] > ZERO)
                 .limit(size)
                 .peek(i -> next[i]--)
                 .count();
