@@ -1,5 +1,6 @@
 package com.bnpp.kata.bookdiscountsale.service;
 
+import com.bnpp.kata.bookdiscountsale.exception.InvalidBookException;
 import com.bnpp.kata.bookdiscountsale.model.BookItems;
 import com.bnpp.kata.bookdiscountsale.model.GroupDetails;
 import com.bnpp.kata.bookdiscountsale.model.OrderResponse;
@@ -23,6 +24,11 @@ public class BookPriceService {
 
     public OrderResponse calculateBookPrice(@NotEmpty(message = "Book list cannot be empty")
                                             List<@Valid BookItems> bookItemsList) {
+
+        if (bookItemsList.stream().anyMatch(item ->
+                item.getQuantity() <= 0 || item.getTitle().trim().isEmpty())) {
+            throw new InvalidBookException("Invalid book items: check quantity/title");
+        }
         int[] quantities = bookItemsList.stream()
                 .mapToInt(BookItems::getQuantity)
                 .toArray();

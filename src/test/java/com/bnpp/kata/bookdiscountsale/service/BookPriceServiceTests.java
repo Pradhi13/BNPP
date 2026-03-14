@@ -1,5 +1,6 @@
 package com.bnpp.kata.bookdiscountsale.service;
 
+import com.bnpp.kata.bookdiscountsale.exception.InvalidBookException;
 import com.bnpp.kata.bookdiscountsale.model.BookItems;
 import com.bnpp.kata.bookdiscountsale.model.OrderResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static com.bnpp.kata.bookdiscountsale.constants.Constants.ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BookPriceServiceTests {
 
@@ -23,6 +25,12 @@ public class BookPriceServiceTests {
         bookPriceService = new BookPriceService();
         bookItemsList = new ArrayList<>();
 
+    }
+
+    @Test
+    void invalidQuantityThrowsBusinessException() {  // Explicit!
+        assertThrows(InvalidBookException.class,
+                () -> bookPriceService.calculateBookPrice(List.of(new BookItems("A", -1))));
     }
 
     @Test
@@ -42,8 +50,8 @@ public class BookPriceServiceTests {
     @Test
     public void calculateSingleBookWithZeroQuantity() {
         bookItemsList = List.of(new BookItems("Clean code", 0));
-        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(ZERO, reponse.getDiscountedPrice());
+        assertThrows(InvalidBookException.class,
+                () -> bookPriceService.calculateBookPrice(bookItemsList));
     }
 
     @Test
