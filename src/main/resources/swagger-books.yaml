@@ -124,3 +124,16 @@ components:
           items:
             $ref: '#/components/schemas/GroupDetails'
       description: Final calculated price and group details
+    ErrorResponse:
+      type: object
+      required: [ code, message ]
+      x-constructor: all-args
+      properties:
+        code:
+          type: string
+          example: "INVALID_BASKET"
+          description: Error code (VALIDATION_ERROR, INVALID_BASKET, INTERNAL_ERROR)
+        message:
+          type: string
+          example: "Quantity cannot be negative for 'Clean Code': -1"
+      description: Standardized error response
