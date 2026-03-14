@@ -52,4 +52,21 @@ public class BookControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string("320.0"));
     }
+
+    @Test
+    void shouldReturnBadRequestForInvalidJson() throws Exception {
+
+        mockMvc.perform(post("/api/books/calculatePrice")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("invalid-json"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnUnsupportedMediaTypeWhenContentTypeMissing() throws Exception {
+
+        mockMvc.perform(post("/api/books/calculatePrice")
+                        .content("{\"books\":[1,2,3]}"))
+                .andExpect(status().isUnsupportedMediaType());
+    }
 }
