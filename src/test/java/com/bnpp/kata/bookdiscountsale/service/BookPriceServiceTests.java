@@ -86,13 +86,44 @@ public class BookPriceServiceTests {
     }
 
     @Test
-    void calculatethreeBooksTwoExtraCopyDiscountsUniqueOnly() {
+    void calculateTwoBooksTwoExtraCopyDiscountsUniqueOnly() {
+        bookItemsList = List.of(new BookItems("Clean code", 2),
+                new BookItems("The Clean Coder", 2));
+
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(190.0, price);
+    }
+
+    @Test
+    void calculateThreeBooksTwoExtraCopyDiscountsUniqueOnly() {
         bookItemsList = List.of(new BookItems("Clean code", 2),
                 new BookItems("The Clean Coder", 2),
                 new BookItems("Clean Architecture", 1));
 
         double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(235.0, price);
+        assertEquals(230.0, price);
+    }
+
+    @Test
+    void calculateFourBooksTwoExtraCopyDiscountsUniqueOnly() {
+        bookItemsList = List.of(new BookItems("Clean code", 2),
+                new BookItems("The Clean Coder", 2),
+                new BookItems("Clean Architecture", 1),
+                new BookItems("Test Driven Development by Example", 1));
+
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(255.0, price);
+    }
+
+    @Test
+    public void calculatePossibleCombination() {
+        bookItemsList = List.of(new BookItems("Clean code", 2),
+                new BookItems("The Clean Coder", 2),
+                new BookItems("Clean Architecture", 2),
+                new BookItems("Test Driven Development by Example", 1),
+                new BookItems("Working Effectively With Legacy Code",1));
+        double price = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(320.0, price);
     }
 
 }
