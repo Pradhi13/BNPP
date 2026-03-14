@@ -1,6 +1,7 @@
 package com.bnpp.kata.bookdiscountsale.service;
 
 import com.bnpp.kata.bookdiscountsale.model.BookItems;
+import com.bnpp.kata.bookdiscountsale.model.OrderResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,34 +26,32 @@ public class BookPriceServiceTests {
     }
 
     @Test
-    public void calculateSingleBookPrice() {
-
-
-        bookItemsList = List.of(new BookItems("Clean code", 2));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(100.0, price);
+    void singleBook() {
+        List<BookItems> books = List.of(new BookItems("Clean Code", 1));
+        OrderResponse response = bookPriceService.calculateBookPrice(books);
+        assertEquals(50, response.getDiscountedPrice());
     }
 
     @Test
     public void calculateSingleBookWithNullValue() {
 
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(ZERO, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(ZERO, reponse.getDiscountedPrice());
     }
 
     @Test
     public void calculateSingleBookWithZeroQuantity() {
         bookItemsList = List.of(new BookItems("Clean code", 0));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(ZERO, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(ZERO, reponse.getDiscountedPrice());
     }
 
     @Test
     public void calculateTwoDifferentBookPrice() {
         bookItemsList = List.of(new BookItems("Clean code", 1),
                 new BookItems("The Clean Coder", 1));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(95.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(95.0, reponse.getDiscountedPrice());
     }
 
     @Test
@@ -60,8 +59,8 @@ public class BookPriceServiceTests {
         bookItemsList = List.of(new BookItems("Clean code", 1),
                 new BookItems("The Clean Coder", 1),
                 new BookItems("Clean Architecture", 1));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(135.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(135.0, reponse.getDiscountedPrice());
     }
 
     @Test
@@ -70,8 +69,8 @@ public class BookPriceServiceTests {
                 new BookItems("The Clean Coder", 1),
                 new BookItems("Clean Architecture", 1),
                 new BookItems("Test Driven Development by Example", 1));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(160.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(160.0, reponse.getDiscountedPrice());
     }
 
     @Test
@@ -81,8 +80,8 @@ public class BookPriceServiceTests {
                 new BookItems("Clean Architecture", 1),
                 new BookItems("Test Driven Development by Example", 1),
                 new BookItems("Working Effectively With Legacy Code",1));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(187.5, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(187.5, reponse.getDiscountedPrice());
     }
 
     @Test
@@ -90,8 +89,8 @@ public class BookPriceServiceTests {
         bookItemsList = List.of(new BookItems("Clean code", 2),
                 new BookItems("The Clean Coder", 2));
 
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(190.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(190.0, reponse.getDiscountedPrice());
     }
 
     @Test
@@ -100,8 +99,8 @@ public class BookPriceServiceTests {
                 new BookItems("The Clean Coder", 2),
                 new BookItems("Clean Architecture", 1));
 
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(230.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(230.0, reponse.getDiscountedPrice());
     }
 
     @Test
@@ -111,8 +110,19 @@ public class BookPriceServiceTests {
                 new BookItems("Clean Architecture", 1),
                 new BookItems("Test Driven Development by Example", 1));
 
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(255.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(255.0, reponse.getDiscountedPrice());
+    }
+
+    @Test
+    public void calculateActualPrice() {
+        bookItemsList = List.of(new BookItems("Clean code", 2),
+                new BookItems("The Clean Coder", 2),
+                new BookItems("Clean Architecture", 2),
+                new BookItems("Test Driven Development by Example", 1),
+                new BookItems("Working Effectively With Legacy Code",1));
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(400, reponse.getTotalPrice());
     }
 
     @Test
@@ -122,8 +132,8 @@ public class BookPriceServiceTests {
                 new BookItems("Clean Architecture", 2),
                 new BookItems("Test Driven Development by Example", 1),
                 new BookItems("Working Effectively With Legacy Code",1));
-        double price = bookPriceService.calculateBookPrice(bookItemsList);
-        assertEquals(320.0, price);
+        OrderResponse reponse = bookPriceService.calculateBookPrice(bookItemsList);
+        assertEquals(320.0, reponse.getDiscountedPrice());
     }
 
 }

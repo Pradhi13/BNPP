@@ -1,6 +1,7 @@
 package com.bnpp.kata.bookdiscountsale.controller;
 
 import com.bnpp.kata.bookdiscountsale.model.Books;
+import com.bnpp.kata.bookdiscountsale.model.OrderResponse;
 import com.bnpp.kata.bookdiscountsale.service.BookPriceService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +19,12 @@ public class BookController {
     }
 
     @PostMapping("/calculatePrice")
-    public double totalOrderDetails(@RequestBody Books books) {
+    public OrderResponse totalOrderDetails(@RequestBody Books books) {
         return bookPriceService.calculateBookPrice(books.getBooks());
 
     }
+
+
 
 
 }

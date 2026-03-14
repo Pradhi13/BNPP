@@ -14,84 +14,113 @@ externalDocs:
   url: http://swagger.io
 servers:
   - url: http://localhost:8080/api
+
 paths:
-  /calculatePrice:
+  /calculate-price:
     post:
-      operationId: totalOrderDetails
+      summary: Calculate optimal book discount price
+      operationId: calculateBookPrice
       requestBody:
         required: true
-        description: Total Order details with discounted price
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Books'
       responses:
         '200':
-          description: Successful operation
+          description: Order pricing with best groups
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderResponse'
         '400':
-          description: Invalid Input
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid input
+
 components:
   schemas:
     BookItems:
       type: object
-      required:
-        - title
-        - quantity
+      required: [title, quantity]
+      x-constructor: all-args
       properties:
         title:
-          type: string  # Quoted 'string'
+          type: string
+          example: "Clean Code"
         quantity:
           type: integer
+          minimum: 0
+          example: 2
+      description: Book title and quantity
+
     Books:
       type: object
+      required: [books]
+      x-constructor: all-args
       properties:
         books:
           type: array
           items:
             $ref: '#/components/schemas/BookItems'
+          minItems: 1
+      example:
+        books:
+          - title: "Clean Code"
+            quantity: 2
+
     GroupDetails:
       type: object
+      required: [books, groupSize, discountPercentage, afterdiscountPrice]
+      x-constructor: all-args
       properties:
         books:
           type: array
           items:
             type: string
+          example: ["Clean Code"]
         groupSize:
           type: integer
+          example: 1
         discountPercentage:
-          type: double
+          type: number
+          format: double
+          example: 0.0
         afterdiscountPrice:
-          type: double
+          type: number
+          format: double
+          example: 50.0
+      description: Discounted group details
     OrderResponse:
       type: object
+      required: [groups, totalPrice, discountedPrice]
+      x-constructor: all-args
       properties:
         groups:
           type: array
           items:
             $ref: '#/components/schemas/GroupDetails'
         totalPrice:
-          type: double
+          type: number
+          format: double
+          example: 100.0
         discountedPrice:
-          type: double
+          type: number
+          format: double
+          example: null
+      example:
+        groups: []
+        totalPrice: 100.0
+        discountedPrice: null
     PriceResult:
       type: object
+      required: [ price, groups ]
+      x-constructor: all-args
       properties:
         price:
-          type: double
+          type: number
+          format: double
+          example: 80.0
         groups:
           type: array
           items:
             $ref: '#/components/schemas/GroupDetails'
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
+      description: Final calculated price and group details

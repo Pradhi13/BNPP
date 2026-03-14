@@ -102,6 +102,8 @@
                                 <fullJavaUtil>true</fullJavaUtil>
                                 <skipDefaultInterface>false</skipDefaultInterface>
                                 <skipDefaultMethods>true</skipDefaultMethods>
+                                <generateApiTests>false</generateApiTests>
+                                <generateModelTests>false</generateModelTests>
                             </additionalProperties>
                         </configuration>
                     </execution>
